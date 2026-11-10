@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Fintech security operations | Case study</title>
+<meta name="description" content="Case study: six months leading the in-house security function for a specialty-finance company of about 130 people. Endpoint coverage, DLP tuning, leaver hygiene and SOC 2 support.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://nickmountlion.github.io/fintech-security-operations/">
+<meta property="og:image" content="https://nickmountlion.github.io/fintech-security-operations/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+<meta property="og:image:alt" content="Building an in-house security function for a fintech">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:title" content="Building an in-house security function for a fintech">
+<meta property="og:description" content="Case study: six months leading the in-house security function for a specialty-finance company of about 130 people. Endpoint coverage, DLP tuning, leaver hygiene and SOC 2 support.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#f6f7f4;--surface:#ffffff;--fg:#17211f;--muted:#5b6865;--line:#d9dfdb;--accent:#0f5c4d;--crit:#b3402a;--warn:#c58a1b;--ok:#2f7d5b;--on-rate:#ffffff;--on-warn:#1f1700;
+--display:'Bricolage Grotesque','Segoe UI',sans-serif;--body:'IBM Plex Sans','Segoe UI',sans-serif;--mono:'IBM Plex Mono',Consolas,monospace}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1715;--surface:#16211e;--fg:#e6ece9;--muted:#9aaaa5;--line:#2a3a36;--accent:#5fc2a8;--crit:#e47a63;--warn:#e0b050;--ok:#64c298;--on-rate:#0f1715;--on-warn:#0f1715;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);padding-block:40px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:920px;margin:0 auto;display:grid;gap:48px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,6vw,3rem);font-weight:700}
+h2{font-size:1.5rem}h3{font-size:1.05rem}
+.eyebrow,.k{font:500 .75rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+p{margin:0;max-width:65ch}
+header,section{display:grid;gap:14px;min-width:0}
+.lede{font-size:1.15rem;color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.facts div{background:var(--surface);padding:14px;display:grid;gap:4px}
+.facts b{font:700 1.5rem var(--display);font-variant-numeric:tabular-nums}
+.bar{display:flex;height:34px;border-radius:3px;overflow:hidden;font:500 .85rem var(--mono);color:var(--on-rate)}
+.bar span{display:grid;place-items:center;min-width:0}
+.c{background:var(--crit)}.w{background:var(--warn);color:var(--on-warn)}.o{background:var(--ok)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--muted);font-size:.9rem}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;background:var(--sw)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.col{background:var(--surface);border:1px solid var(--line);padding:16px;display:grid;gap:8px;align-content:start;min-width:0}
+.col.rate{border-left:4px solid var(--sw)}
+.steps{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);counter-reset:s}
+.steps li{background:var(--surface);padding:14px;display:grid;gap:6px;align-content:start;counter-increment:s;font-size:.92rem}
+.steps li::before{content:"0" counter(s);font:500 .75rem var(--mono);color:var(--accent)}
+.steps b{font-family:var(--display);font-size:1.05rem}
+.stack{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
+.stack>div{background:var(--surface);padding:12px 14px;display:grid;grid-template-columns:150px 1fr;gap:6px 14px;align-items:start}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{border:1px solid var(--line);border-radius:3px;padding:2px 8px;font-size:.86rem;background:var(--bg)}
+@media (max-width:560px){.stack>div{grid-template-columns:1fr}}
+.wrap{overflow-x:auto;border:1px solid var(--line);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:.9rem}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font:500 .72rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+td:first-child{font-weight:500}
+ul{margin:0;padding-left:1.1em;display:grid;gap:4px}
+.fit{border-top:2px solid var(--accent);padding-top:18px}
+small{color:var(--muted)}
+
+a{color:var(--accent)}
+a.col{text-decoration:none;color:inherit;transition:border-color .15s}
+a.col:hover{border-color:var(--accent)}
+a.col .go{color:var(--accent);font:500 .8rem var(--mono)}
+.note{border-left:3px solid var(--accent);padding:10px 14px;background:var(--surface);color:var(--muted);font-size:.95rem}
+footer{border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:.9rem;display:flex;flex-wrap:wrap;gap:6px 18px}
+</style>
+</head>
+<body>
+<main>
+<header>
+<span class="eyebrow">Case study · Security operations and program build</span>
+<h1>Building an in-house security function for a fintech</h1>
+<p class="lede">A specialty-finance company of about 130 people moved security away from an outside IT provider. For six months I led the consulting team that ran it day to day and reported to executives and shareholders. This is how the work was organized and what it changed.</p>
+<small>Facundo Montefalcone, lead cybersecurity infrastructure architect. Client name and open findings are withheld.</small>
+</header>
+<div class="facts"><div><b>6 mo</b><span class="k">May to October 2026</span></div><div><b>~130</b><span class="k">Employees in scope</span></div><div><b>113</b><span class="k">Endpoints reconciled against EDR</span></div><div><b>~99%</b><span class="k">Less DLP alert noise after tuning</span></div><div><b>5</b><span class="k">Workstreams in the 30-day roadmap</span></div><div><b>SOC 2</b><span class="k">Audit supported</span></div></div><section><h2>Context</h2><p>A US specialty-finance company runs on Microsoft 365 with a separate identity provider and a mixed macOS and Windows fleet. It had relied on an outside IT provider for security and wanted the function in-house.</p><p>My role was Lead Cybersecurity Infrastructure Architect and Engineer, through a consultancy. I owned planning, prioritization and security reporting to executive leadership and shareholders.</p><p class="note">Attribution: I led the team. Engineers on the team executed much of the hands-on work listed here, and I say "we" where that is the case.</p></section><section><h2>First 30 days</h2><ol class="steps"><li><b>Environment audit</b>Inventory of identities, endpoints, applications and admin paths, so priorities came from evidence.</li><li><b>Enterprise browser</b>Architecture for a managed browser as a policy enforcement point.</li><li><b>MDM migration</b>Plan to consolidate device management onto one platform per operating system.</li><li><b>SOC 2 readiness</b>Mapped controls to evidence and to named owners.</li><li><b>Privileged access</b>Hardening of admin roles and the paths used to reach them.</li></ol></section><section><h2>What the team delivered</h2><div class="wrap"><table><thead><tr><th>Workstream</th><th>What we did</th><th>Result</th></tr></thead><tbody><tr><td>Endpoint coverage</td><td>Reconciled EDR enrollment against two device-management tools and the asset inventory</td><td>113 devices confirmed, about 14 unaccounted devices traced one by one, status report to leadership</td></tr><tr><td>Device control</td><td>USB mass-storage block piloted with 5 users, executives included, before wider rollout</td><td>No exceptions requested during the pilot</td></tr><tr><td>Leaver hygiene</td><td>Audited every deactivated account over the previous quarter</td><td>Corrected accounts left suspended instead of deactivated, reassigned directory group ownership, proposed HR-triggered termination notices</td></tr><tr><td>Risky sign-ins</td><td>Investigated flagged identities, revoked sessions, documented closure</td><td>About 5 cases closed and the identity security score cleared</td></tr><tr><td>Data loss prevention</td><td>Migrated file policies from the cloud-app security tool to Microsoft Purview and tuned third-party storage rules</td><td>About 99% less alert noise. Spotted a licensing change that would make third-party coverage pay-per-event and raised the cost decision months ahead</td></tr><tr><td>External collaboration</td><td>Restricted guest access to an approved domain list. Rerouted operational alerts for 9 external vendor users into a tenant-scoped Teams channel</td><td>Those alerts no longer leave the tenant by email</td></tr><tr><td>Incident readiness</td><td>Phishing response runbook: message removal, click investigation, log review</td><td>A repeatable first-hour response</td></tr><tr><td>Network</td><td>Firewall firmware upgrade plan built with vendor support and a risk assessment</td><td>Presented to leadership before any change window</td></tr><tr><td>Audit support</td><td>Answered SOC 2 auditor requests on network segmentation and change approval</td><td>Agreed rule: only changes with business-wide impact need executive sign-off</td></tr></tbody></table></div></section><section><h2>How I ran the function</h2><div class="cols"><div class="col"><h3>Daily sync, owners and dates</h3><p>Thirty minutes every morning. Every item had one owner and a date, and blocked items were escalated the same day.</p></div><div class="col"><h3>One tracker per initiative</h3><p>Applications, users, roles and status in a sheet the client could read without a meeting.</p></div><div class="col"><h3>Reports for executives</h3><p>Status written as decisions, risk and cost, with the technical detail attached, not leading.</p></div><div class="col"><h3>Written approval first</h3><p>Anything that could touch the business got written sign-off before the change, and minutes after every meeting.</p></div></div></section><section><h2>Related work</h2><p>The same team then handled the sister organization's exit from its outsourced IT and SOC provider. <a href="https://nickmountlion.github.io/msp-exit-security-cutover/">Read the MSP exit case study</a>.</p></section><section><h2>Stack</h2><div class="stack"><div><span class="k">Identity</span><div class="chips"><span>Okta</span><span>Microsoft Entra ID</span></div></div><div><span class="k">Endpoint</span><div class="chips"><span>CrowdStrike Falcon</span><span>Jamf</span></div></div><div><span class="k">Data</span><div class="chips"><span>Microsoft Purview</span><span>Defender for Cloud Apps</span></div></div><div><span class="k">Collaboration</span><div class="chips"><span>Microsoft 365</span><span>Teams</span><span>SharePoint</span></div></div><div><span class="k">Compliance</span><div class="chips"><span>SOC 2</span></div></div></div><small>Client, provider, staff and vendor contact names, addresses, configurations and open findings are withheld. Figures come from my own working records.</small></section>
+<footer><span>Case study by Facundo "Nick" Montefalcone</span><a href="https://nickmountlion.github.io/">Portfolio</a><a href="https://github.com/nickmountlion">GitHub</a><a href="https://nickmountlion.github.io/msp-exit-security-cutover/">Related: the MSP exit</a></footer>
+</main>
+</body>
+</html>
